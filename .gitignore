@@ -1,0 +1,13 @@
+node_modules/
+*.log
+.env
+data/
+*.sqlite
+*.sqlite-journal
+*.db
+coverage/
+.DS_Store
+
+# Reproducible release artifacts — regenerate with `npm run package`
+public-free-build/
+private-pro-build/

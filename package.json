@@ -1,0 +1,25 @@
+{
+  "name": "hookvault-free",
+  "version": "1.0.0",
+  "description": "HookVault Free — self-hostable webhook delivery gateway (open-core)",
+  "scripts": {
+    "start": "node --experimental-sqlite src/core/server.js",
+    "dev": "node --watch --experimental-sqlite src/core/server.js",
+    "test": "node --experimental-sqlite --test tests/*.test.js",
+    "package": "node scripts/package.js",
+    "migrate": "node --experimental-sqlite src/core/db/migrate.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "zod": "^4.4.3"
+  }
+}
