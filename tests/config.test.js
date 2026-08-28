@@ -45,3 +45,15 @@ test('loadConfig allows a strong secret in production', () => {
   const cfg = loadConfig({ NODE_ENV: 'production', MASTER_SIGNING_SECRET: 'a-strong-secret' });
   assert.equal(cfg.nodeEnv, 'production');
 });
+
+test('loadConfig refuses a non-loopback HOST without an explicit override', () => {
+  assert.throws(
+    () => loadConfig({ HOST: '0.0.0.0' }),
+    /HOOKVAULT_ALLOW_REMOTE/,
+  );
+});
+
+test('loadConfig allows a non-loopback HOST when HOOKVAULT_ALLOW_REMOTE=1', () => {
+  const cfg = loadConfig({ HOST: '0.0.0.0', HOOKVAULT_ALLOW_REMOTE: '1' });
+  assert.equal(cfg.host, '0.0.0.0');
+});

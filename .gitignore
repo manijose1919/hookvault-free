@@ -8,6 +8,6 @@ data/
 coverage/
 .DS_Store
 
-# Reproducible release artifacts — regenerate with `npm run package`
+# Reproducible release artifacts
 public-free-build/
 private-pro-build/
