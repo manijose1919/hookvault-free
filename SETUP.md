@@ -29,6 +29,7 @@ cp .env.example .env
 | `DELIVERY_TIMEOUT_MS` | `10000` | Per-delivery HTTP timeout |
 | `MAX_DELIVERY_ATTEMPTS` | `3` | Attempts before an event is dead-lettered |
 | `NODE_ENV` | `development` | In `production`, a non-default `MASTER_SIGNING_SECRET` is required |
+| `HOOKVAULT_ALLOW_REMOTE` | unset | Required to bind `HOST` to anything other than loopback |
 
 Generate a strong secret:
 
@@ -64,6 +65,10 @@ npm test
 ## Production notes
 
 - Bind to `127.0.0.1` and place HookVault behind a TLS-terminating reverse proxy.
+  Binding to `0.0.0.0` is refused unless `HOOKVAULT_ALLOW_REMOTE=1`.
+- Delivery targets must be public http(s) URLs — loopback, RFC1918, and
+  link-local/metadata addresses are rejected so HookVault cannot be used as
+  an SSRF trampoline.
 - The management API (`/sources`, `/deliveries`, dashboard) is unauthenticated in
   the Free tier and relies on localhost binding. Network-facing API-key auth is a
   Premium feature.

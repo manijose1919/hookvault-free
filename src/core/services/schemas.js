@@ -1,6 +1,8 @@
 import { z } from 'zod';
+import { isBlockedDeliveryUrl } from './url-guard.js';
 
-// Reusable http(s) URL validator that also blocks non-web protocols.
+// Reusable http(s) URL validator that also blocks loopback / private / metadata
+// targets so the delivery worker cannot be used as an SSRF trampoline.
 const httpUrl = z
   .string()
   .max(2000)
@@ -14,7 +16,10 @@ const httpUrl = z
       }
     },
     { message: 'must be a valid http(s) URL' }
-  );
+  )
+  .refine((v) => !isBlockedDeliveryUrl(v), {
+    message: 'must not target loopback, private, or link-local addresses',
+  });
 
 export const createSourceSchema = z.object({
   name: z.string().trim().min(1).max(200),

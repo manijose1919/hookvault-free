@@ -55,5 +55,17 @@ export function loadConfig(overrides = {}) {
     );
   }
 
+  // Free-tier management APIs are unauthenticated. Refuse a non-loopback bind
+  // unless the operator opts in, so a copied compose file cannot expose the
+  // dashboard on the LAN by accident.
+  const loopback = new Set(['127.0.0.1', 'localhost', '::1']);
+  if (!loopback.has(config.host) && str(env.HOOKVAULT_ALLOW_REMOTE, '') !== '1') {
+    throw new Error(
+      `HOST "${config.host}" is not loopback. The Free-tier management API is ` +
+        'unauthenticated — keep HOST=127.0.0.1, or set HOOKVAULT_ALLOW_REMOTE=1 ' +
+        'if you really intend to expose it behind your own auth/proxy.'
+    );
+  }
+
   return config;
 }
